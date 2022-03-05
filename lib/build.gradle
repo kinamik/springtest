@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'eclipse'
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:27.1-jre'
+    // Spring boot と Spring data関連のライブラリを読み込みます。
+    implementation 'org.springframework.boot:spring-boot-dependencies:2.1.8.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.1.8.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.8.RELEASE'
+    implementation 'org.springframework:spring-core:5.1.9.RELEASE'
+    implementation 'org.springframework:spring-aspects:5.1.9.RELEASE'
+    // postgresn関連のライブラリを読み込みます。
+    implementation 'org.postgresql:postgresql:42.2.8'
+    
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1'
+
+    // テスト関連のライブラリを読み込みます。
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+
+    components {
+        withModule('org.springframework:spring-beans') {
+            allVariants {
+                withDependencyConstraints {
+                    it.findAll { it.name == 'snakeyaml' }.each { it.version { strictly '1.19' } }
+                }
+            }
+        }
+    }
+}
+
+bootJar {
+    // 作成されるjarファイルの名前を設定します。 今回の場合は、app.jarとなります。
+    baseName = 'app'
+    // spring boot 起動のクラス名を設定します。
+    mainClassName = 'jp.co.test.App'
+}
+
+test {
+    useJUnitPlatform()
+}
